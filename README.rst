@@ -34,6 +34,11 @@ Installation
 You should now see an "Assume" button near the top of each Change User form
 in admin.
 
+4. (mapes911) For django 1.5 if you are using a custom user model you need
+    to move the change_form.html file to a directory matching where your
+    user model resides.
+    eg. templates > admin > myapp > mycustomuser > change_form.html
+
 
 Options
 -------

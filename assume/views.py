@@ -4,8 +4,10 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, SESSION_KEY, BACKEND_SESSION_KEY
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib import messages
+
+User = get_user_model()
 
 
 CAN_ASSUME_STAFF = getattr(settings, 'CAN_ASSUME_STAFF', False)
@@ -26,7 +28,10 @@ def assume_user(request, id, next_url=URL_AFTER_ASSUME):
         return HttpResponseRedirect(reverse('admin:auth_user_change', args=(user.id,)))
 
     # Call authenticate without a password (this only works with our custom backend)
-    user = authenticate(username=user.username)
+    try:
+        user = authenticate(username=user.username)
+    except:
+        user = authenticate(username=user.email)
 
     # We could just call django.contrib.auth.login(request, user) here, but
     # instead we use duplicate code so that the last_login field doesn't get

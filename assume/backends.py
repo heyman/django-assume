@@ -1,5 +1,7 @@
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class AssumableModelBackend(ModelBackend):
@@ -16,7 +18,7 @@ class AssumableModelBackend(ModelBackend):
         try:
             user = User.objects.get(username=username)
             # If no password was supplied, assume that we've already verified credentials
-            if password == None:
+            if password is None:
                 return user
             # Otherwise, check the password
             elif user.check_password(password):
@@ -43,7 +45,7 @@ class AssumableEmailOrUsernameModelBackend(ModelBackend):
         try:
             user = User.objects.get(**kwargs)
             # If no password was supplied, assume that we've already verified credentials
-            if password == None:
+            if password is None:
                 return user
             # Otherwise, check the password
             elif user.check_password(password):
